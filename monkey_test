@@ -1,6 +1,7 @@
 #coding=utf8
 import os
-put =input('请输入要跑的模块：')
+print("单跑某个模块需要输入包名(package)，全跑则需要输入p:n/no(小写喔)")
+put =input('请输入要跑的模块 p:')
 def adb_devices():
     x=('adb devices')
     m=os.popen(x)
@@ -13,8 +14,13 @@ def adb_devices():
     return pp
 def monkey_test():
     for i in adb_devices()[0:len(adb_devices()) - 1]:
-        print(i)
-        os.popen('adb -s %s shell monkey -p %s 500 '%(i,put))
-        os.popen('adb -s %s shell logcat -v time >monkey_log_%s.txt'%(i,i))
+        if put =='n' or put =='no' or put=='N' or put =='No':
+            print('测试设备的SN%s'%i)
+            os.popen('adb -s %s shell monkey 500 '%i)
+            os.popen('adb -s %s shell logcat -v time >D:\monkey_log_%s.txt'%(i,i))
+        else:
+            print('测试设备的SN%s'%i)
+            os.popen('adb -s %s shell monkey -p %s 500 '%(i,put))
+            os.popen('adb -s %s shell logcat -v time >D:\monkey_log_%s.txt'%(i,i))
 
 monkey_test()

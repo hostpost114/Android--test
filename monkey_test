@@ -1,0 +1,20 @@
+#coding=utf8
+import os
+put =input('请输入要跑的模块：')
+def adb_devices():
+    x=('adb devices')
+    m=os.popen(x)
+    # print(m)
+    pp=[]
+    for lie in m.readlines():
+        if "devices"not in lie:
+            l=lie.split('device')[0]
+            pp.append(l)
+    return pp
+def monkey_test():
+    for i in adb_devices()[0:len(adb_devices()) - 1]:
+        print(i)
+        os.popen('adb -s %s shell monkey -p %s 500 '%(i,put))
+        os.popen('adb -s %s shell logcat -v time >monkey_log_%s.txt'%(i,i))
+
+monkey_test()
